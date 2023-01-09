@@ -1,6 +1,6 @@
 # Solitaire TUI
 
-Klondike Solitaire for the terminal
+Klondike solitaire for the terminal
 
 <img alt="screenshot" src="https://user-images.githubusercontent.com/7474900/210304154-30302ca1-6f6e-4493-946e-1962466c34fa.png" width="50%" />
 
