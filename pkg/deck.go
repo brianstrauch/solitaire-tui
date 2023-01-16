@@ -45,7 +45,7 @@ func (d *Deck) Expand() {
 func (d *Deck) View() string {
 	// Outline
 	if d.Size() == 0 {
-		return viewCard(" ", "", false)
+		return viewCard(" ", "", "#EEEEEE")
 	}
 
 	// Expanded cards

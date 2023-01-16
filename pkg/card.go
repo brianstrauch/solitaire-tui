@@ -31,12 +31,18 @@ func NewCard(value, suit int) *Card {
 }
 
 func (c *Card) View() string {
+	color := "#000000"
+
+	if c.IsSelected {
+		color = "#FFFF00"
+	}
+
 	if !c.IsVisible {
-		return viewCard("╱", "", c.IsSelected)
+		return viewCard("╱", "", color)
 	}
 
 	style := lipgloss.NewStyle().Foreground(lipgloss.Color(c.Color()))
-	return viewCard(" ", style.Render(c.String()), c.IsSelected)
+	return viewCard(" ", style.Render(c.String()), color)
 }
 
 func (c *Card) Flip() {
@@ -55,12 +61,8 @@ func (c *Card) String() string {
 	return values[c.Value] + suits[c.Suit]
 }
 
-func viewCard(design, shorthand string, isSelected bool) string {
-	style := lipgloss.NewStyle()
-	if isSelected {
-		style = style.Foreground(lipgloss.Color("#FFFF00"))
-	}
-
+func viewCard(design, shorthand, color string) string {
+	style := lipgloss.NewStyle().Foreground(lipgloss.Color(color))
 	padding := strings.Repeat("─", width-2-lipgloss.Width(shorthand))
 
 	view := style.Render("╭") + shorthand + style.Render(padding+"╮") + "\n"
