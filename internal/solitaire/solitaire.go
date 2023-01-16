@@ -224,11 +224,15 @@ func (s *Solitaire) move(to *index) bool {
 
 func (s *Solitaire) toggleSelect(selected *index) {
 	if s.selected != nil {
-		s.decks[s.selected.deck].Get(s.selected.card).IsSelected = false
+		for _, card := range s.decks[s.selected.deck].GetFrom(s.selected.card) {
+			card.IsSelected = false
+		}
 		s.selected = nil
 	} else {
 		s.selected = selected
-		s.decks[s.selected.deck].Get(s.selected.card).IsSelected = true
+		for _, card := range s.decks[s.selected.deck].GetFrom(s.selected.card) {
+			card.IsSelected = true
+		}
 	}
 }
 
