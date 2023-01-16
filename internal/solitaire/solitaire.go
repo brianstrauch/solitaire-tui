@@ -1,7 +1,6 @@
 package solitaire
 
 import (
-	"fmt"
 	"strings"
 
 	"github.com/brianstrauch/solitaire-tui/pkg"
@@ -51,8 +50,6 @@ var deckLocations = []cell{
 }
 
 type Solitaire struct {
-	message string
-
 	decks    []*pkg.Deck
 	selected *index
 
@@ -88,10 +85,7 @@ func New() *Solitaire {
 		deck.Expand()
 	}
 
-	return &Solitaire{
-		message: "Solitaire",
-		decks:   decks,
-	}
+	return &Solitaire{decks: decks}
 }
 
 func (s *Solitaire) Init() tea.Cmd {
@@ -130,8 +124,6 @@ func (s *Solitaire) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 }
 
 func (s *Solitaire) click(x, y int) {
-	s.message = fmt.Sprintf("(%d, %d)", x, y)
-
 	for i, deck := range s.decks {
 		loc := deckLocations[i]
 		if ok, j := deck.IsClicked(x-loc.x, y-loc.y); ok {
@@ -159,7 +151,6 @@ func (s *Solitaire) click(x, y int) {
 					s.toggleSelect(&index{deck: i, card: deck.Size() - 1})
 				}
 			case tableau:
-				s.message = fmt.Sprintf("%d %d", j, deck.Size()-1)
 				if j == deck.Size()-1 && !deck.Top().IsVisible {
 					if s.selected != nil {
 						s.toggleSelect(s.selected)
@@ -191,7 +182,6 @@ func (s *Solitaire) draw(n int, from, to *pkg.Deck) {
 
 	for i := 0; i < n; i++ {
 		if card := from.Pop(); card != nil {
-			s.message += card.String()
 			card.Flip()
 			to.Add(card)
 		}
@@ -212,7 +202,6 @@ func (s *Solitaire) move(to *index) bool {
 			return true
 		}
 	case tableau:
-		s.message = fmt.Sprintf("%d %d", toDeck.Size(), fromCards[0].Value)
 		if toDeck.Size() == 0 && fromCards[0].Value == 12 || toDeck.Size() > 0 && fromCards[0].Value+1 == toDeck.Top().Value && fromCards[0].Color() != toDeck.Top().Color() {
 			idx := s.selected.card
 			s.toggleSelect(s.selected)
