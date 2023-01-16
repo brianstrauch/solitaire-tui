@@ -144,6 +144,9 @@ func (s *Solitaire) click(x, y int) {
 				}
 			case waste:
 				if deck.Size() > 0 {
+					if s.selected != nil && s.selected.deck != i {
+						s.toggleSelect(nil)
+					}
 					s.toggleSelect(&index{deck: i, card: deck.Size() - 1})
 				}
 			case foundation:
