@@ -12,8 +12,8 @@ var (
 )
 
 const (
-	width  = 6
-	height = 5
+	Width  = 6
+	Height = 5
 )
 
 type Card struct {
@@ -63,11 +63,11 @@ func (c *Card) String() string {
 
 func viewCard(design, shorthand, color string) string {
 	style := lipgloss.NewStyle().Foreground(lipgloss.Color(color))
-	padding := strings.Repeat("─", width-2-lipgloss.Width(shorthand))
+	padding := strings.Repeat("─", Width-2-lipgloss.Width(shorthand))
 
 	view := style.Render("╭") + shorthand + style.Render(padding+"╮") + "\n"
-	for i := 1; i < height-1; i++ {
-		view += style.Render("│"+strings.Repeat(design, width-2)+"│") + "\n"
+	for i := 1; i < Height-1; i++ {
+		view += style.Render("│"+strings.Repeat(design, Width-2)+"│") + "\n"
 	}
 	view += style.Render("╰"+padding) + shorthand + style.Render("╯")
 

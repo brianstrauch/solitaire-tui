@@ -1,8 +1,6 @@
 package solitaire
 
 import (
-	"strings"
-
 	"github.com/brianstrauch/solitaire-tui/pkg"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
@@ -13,13 +11,15 @@ type deckType int
 const (
 	stock      deckType = 0
 	waste      deckType = 1
-	foundation deckType = 2
-	tableau    deckType = 6
+	empty      deckType = 2
+	foundation deckType = 3
+	tableau    deckType = 7
 )
 
 var deckTypes = []deckType{
 	stock,
 	waste,
+	empty,
 	foundation,
 	foundation,
 	foundation,
@@ -31,22 +31,6 @@ var deckTypes = []deckType{
 	tableau,
 	tableau,
 	tableau,
-}
-
-var deckLocations = []cell{
-	{0, 0},
-	{6, 0},
-	{18, 0},
-	{24, 0},
-	{30, 0},
-	{36, 0},
-	{0, 5},
-	{6, 5},
-	{12, 5},
-	{18, 5},
-	{24, 5},
-	{30, 5},
-	{36, 5},
 }
 
 type Solitaire struct {
@@ -58,22 +42,22 @@ type Solitaire struct {
 	maxHeight    int
 }
 
-type cell struct {
-	x int
-	y int
-}
-
 type index struct {
 	deck int
 	card int
 }
 
 func New() *Solitaire {
-	decks := make([]*pkg.Deck, 13)
-
-	decks[stock] = pkg.NewFullDeck()
-	for i := 1; i < len(decks); i++ {
-		decks[i] = pkg.NewEmptyDeck()
+	decks := make([]*pkg.Deck, len(deckTypes))
+	for i := range decks {
+		switch deckTypes[i] {
+		case stock:
+			decks[i] = pkg.NewFullDeck()
+		case empty:
+			decks[i] = nil
+		default:
+			decks[i] = pkg.NewEmptyDeck()
+		}
 	}
 
 	for i := 0; i < len(decks)-int(tableau); i++ {
@@ -124,9 +108,13 @@ func (s *Solitaire) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 }
 
 func (s *Solitaire) click(x, y int) {
+	n := len(s.decks) / 2
+
 	for i, deck := range s.decks {
-		loc := deckLocations[i]
-		if ok, j := deck.IsClicked(x-loc.x, y-loc.y); ok {
+		xi := (i % n) * pkg.Width
+		yi := (i / n) * pkg.Height
+
+		if ok, j := deck.IsClicked(x-xi, y-yi); ok {
 			switch deckTypes[i] {
 			case stock:
 				if deck.Size() > 0 {
@@ -143,11 +131,14 @@ func (s *Solitaire) click(x, y int) {
 				}
 			case foundation:
 				if s.selected != nil && s.selected.deck != i {
-					ok := s.move(&index{deck: i})
-					if !ok {
+					if !s.move(&index{deck: i}) && deck.Size() > 0 {
+						s.toggleSelect(nil)
 						s.toggleSelect(&index{deck: i, card: deck.Size() - 1})
 					}
 				} else if deck.Size() > 0 {
+					if s.selected != nil && s.selected.deck != i {
+						s.toggleSelect(nil)
+					}
 					s.toggleSelect(&index{deck: i, card: deck.Size() - 1})
 				}
 			case tableau:
@@ -159,10 +150,10 @@ func (s *Solitaire) click(x, y int) {
 				} else if s.selected != nil && s.selected.deck != i {
 					ok := s.move(&index{deck: i, card: j})
 					if !ok {
-						s.toggleSelect(&index{deck: i, card: j})
+						s.toggleSelect(nil)
 						s.toggleSelect(&index{deck: i, card: j})
 					}
-				} else if deck.Get(j).IsVisible {
+				} else if deck.Size() > 0 && deck.Get(j).IsVisible {
 					if s.selected != nil && s.selected.deck == i && s.selected.card != j {
 						s.toggleSelect(&index{deck: i, card: j})
 					}
@@ -220,7 +211,7 @@ func (s *Solitaire) toggleSelect(selected *index) {
 			card.IsSelected = false
 		}
 		s.selected = nil
-	} else {
+	} else if s.decks[selected.deck].Size() > 0 {
 		s.selected = selected
 		for _, card := range s.decks[s.selected.deck].GetFrom(s.selected.card) {
 			card.IsSelected = true
@@ -229,25 +220,16 @@ func (s *Solitaire) toggleSelect(selected *index) {
 }
 
 func (s *Solitaire) View() string {
-	view := lipgloss.JoinHorizontal(lipgloss.Top,
-		s.decks[0].View(),
-		s.decks[1].View(),
-		strings.Repeat(" ", 6),
-		s.decks[2].View(),
-		s.decks[3].View(),
-		s.decks[4].View(),
-		s.decks[5].View(),
-	) + "\n"
+	n := len(s.decks) / 2
 
-	view += lipgloss.JoinHorizontal(lipgloss.Top,
-		s.decks[6].View(),
-		s.decks[7].View(),
-		s.decks[8].View(),
-		s.decks[9].View(),
-		s.decks[10].View(),
-		s.decks[11].View(),
-		s.decks[12].View(),
-	) + "\n"
+	var view string
+	for i := 0; i < 2; i++ {
+		row := make([]string, n)
+		for j := range row {
+			row[j] = s.decks[i*n+j].View()
+		}
+		view += lipgloss.JoinHorizontal(lipgloss.Top, row...) + "\n"
+	}
 
 	return view
 }

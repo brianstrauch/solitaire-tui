@@ -43,6 +43,10 @@ func (d *Deck) Expand() {
 }
 
 func (d *Deck) View() string {
+	if d == nil {
+		return strings.Repeat(" ", Width)
+	}
+
 	// Outline
 	if d.Size() == 0 {
 		return viewCard(" ", "", "#EEEEEE")
@@ -62,20 +66,24 @@ func (d *Deck) View() string {
 }
 
 func (d *Deck) IsClicked(x, y int) (bool, int) {
+	if d == nil {
+		return false, 0
+	}
+
 	if d.Size() == 0 {
-		return x >= 0 && x < width && y >= 0 && y < height, 0
+		return x >= 0 && x < Width && y >= 0 && y < Height, 0
 	}
 
 	if d.isExpanded {
 		for i := d.Size() - 1; i >= 0; i-- {
-			if x >= 0 && x < width && y >= i && y < i+height {
+			if x >= 0 && x < Width && y >= i && y < i+Height {
 				return true, i
 			}
 		}
 		return false, 0
 	}
 
-	return x >= 0 && x < width && y >= 0 && y < height, 0
+	return x >= 0 && x < Width && y >= 0 && y < Height, 0
 }
 
 func (d *Deck) Add(cards ...*Card) {
