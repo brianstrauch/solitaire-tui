@@ -3,6 +3,8 @@ package pkg
 import (
 	"math/rand"
 	"strings"
+
+	"github.com/charmbracelet/lipgloss"
 )
 
 type Deck struct {
@@ -49,7 +51,7 @@ func (d *Deck) View() string {
 
 	// Outline
 	if d.Size() == 0 {
-		return viewCard(" ", "", "#EEEEEE")
+		return viewCard(" ", "", lipgloss.AdaptiveColor{Light: "#EEEEEE", Dark: "#888888"})
 	}
 
 	// Expanded cards

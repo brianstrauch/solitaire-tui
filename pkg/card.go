@@ -31,17 +31,17 @@ func NewCard(value, suit int) *Card {
 }
 
 func (c *Card) View() string {
-	color := "#000000"
+	color := lipgloss.AdaptiveColor{Light: "#000000", Dark: "#FFFFFF"}
 
 	if c.IsSelected {
-		color = "#FFFF00"
+		color = lipgloss.AdaptiveColor{Light: "#FFFF00", Dark: "#FFFF00"}
 	}
 
 	if !c.IsVisible {
 		return viewCard("╱", "", color)
 	}
 
-	style := lipgloss.NewStyle().Foreground(lipgloss.Color(c.Color()))
+	style := lipgloss.NewStyle().Foreground(c.Color())
 	return viewCard(" ", style.Render(c.String()), color)
 }
 
@@ -49,11 +49,11 @@ func (c *Card) Flip() {
 	c.IsVisible = !c.IsVisible
 }
 
-func (c *Card) Color() string {
+func (c *Card) Color() lipgloss.AdaptiveColor {
 	if c.Suit == 1 || c.Suit == 2 {
-		return "#FF0000"
+		return lipgloss.AdaptiveColor{Light: "#FF0000", Dark: "#FF0000"}
 	} else {
-		return "#000000"
+		return lipgloss.AdaptiveColor{Light: "#000000", Dark: "#888888"}
 	}
 }
 
@@ -61,8 +61,8 @@ func (c *Card) String() string {
 	return values[c.Value] + suits[c.Suit]
 }
 
-func viewCard(design, shorthand, color string) string {
-	style := lipgloss.NewStyle().Foreground(lipgloss.Color(color))
+func viewCard(design, shorthand string, color lipgloss.AdaptiveColor) string {
+	style := lipgloss.NewStyle().Foreground(color)
 	padding := strings.Repeat("─", Width-2-lipgloss.Width(shorthand))
 
 	view := style.Render("╭") + shorthand + style.Render(padding+"╮") + "\n"
