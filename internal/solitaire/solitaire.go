@@ -60,9 +60,9 @@ func New() *Solitaire {
 		}
 	}
 
-	for i := 0; i < len(decks)-int(tableau); i++ {
-		deck := decks[int(tableau)+i]
-		for j := 0; j <= i; j++ {
+	for i := int(tableau); i < len(decks); i++ {
+		deck := decks[i]
+		for j := int(tableau); j <= i; j++ {
 			deck.Add(decks[stock].Pop())
 		}
 		deck.Top().Flip()
