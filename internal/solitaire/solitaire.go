@@ -109,7 +109,7 @@ func (s *Solitaire) click(x, y int) {
 			switch deckTypes[i] {
 			case stock:
 				if deck.Size() > 0 {
-					s.draw(3, deck, s.decks[waste])
+					s.draw(1, deck, s.decks[waste])
 				} else {
 					s.draw(s.decks[waste].Size(), s.decks[waste], deck)
 				}
@@ -139,8 +139,7 @@ func (s *Solitaire) click(x, y int) {
 					}
 					deck.Top().Flip()
 				} else if s.selected != nil && s.selected.deck != i {
-					ok := s.move(&index{deck: i, card: j})
-					if !ok {
+					if !s.move(&index{deck: i, card: j}) && deck.Size() > 0 {
 						s.toggleSelect(nil)
 						s.toggleSelect(&index{deck: i, card: j})
 					}

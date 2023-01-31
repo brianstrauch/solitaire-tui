@@ -51,7 +51,7 @@ func (d *Deck) View() string {
 
 	// Outline
 	if d.Size() == 0 {
-		return viewCard(" ", "", lipgloss.AdaptiveColor{Light: "#EEEEEE", Dark: "#888888"})
+		return viewCard(" ", "", lipgloss.AdaptiveColor{Light: "#CCCCCC", Dark: "#888888"})
 	}
 
 	// Expanded cards
