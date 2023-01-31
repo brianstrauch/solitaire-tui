@@ -33,12 +33,12 @@ func NewCard(value, suit int) *Card {
 func (c *Card) View() string {
 	color := lipgloss.AdaptiveColor{Light: "#000000", Dark: "#FFFFFF"}
 
-	if c.IsSelected {
-		color = lipgloss.AdaptiveColor{Light: "#FFFF00", Dark: "#FFFF00"}
-	}
-
 	if !c.IsVisible {
 		return viewCard("╱", "", color)
+	}
+
+	if c.IsSelected {
+		color = lipgloss.AdaptiveColor{Light: "#FFFF00", Dark: "#00FFFF"}
 	}
 
 	style := lipgloss.NewStyle().Foreground(c.Color())
@@ -50,10 +50,10 @@ func (c *Card) Flip() {
 }
 
 func (c *Card) Color() lipgloss.AdaptiveColor {
-	if c.Suit == 1 || c.Suit == 2 {
-		return lipgloss.AdaptiveColor{Light: "#FF0000", Dark: "#FF0000"}
+	if c.Suit == 0 || c.Suit == 3 {
+		return lipgloss.AdaptiveColor{Light: "#000000", Dark: "#FFFFFF"}
 	} else {
-		return lipgloss.AdaptiveColor{Light: "#000000", Dark: "#888888"}
+		return lipgloss.AdaptiveColor{Light: "#FF0000", Dark: "#FF0000"}
 	}
 }
 

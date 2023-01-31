@@ -2,6 +2,7 @@ package solitaire
 
 import (
 	"github.com/brianstrauch/solitaire-tui/pkg"
+
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 )
@@ -36,10 +37,7 @@ var deckTypes = []deckType{
 type Solitaire struct {
 	decks    []*pkg.Deck
 	selected *index
-
-	mouse        tea.MouseMsg
-	windowHeight int
-	maxHeight    int
+	mouse    tea.MouseMsg
 }
 
 type index struct {
@@ -73,7 +71,7 @@ func New() *Solitaire {
 }
 
 func (s *Solitaire) Init() tea.Cmd {
-	return nil
+	return tea.ClearScreen
 }
 
 func (s *Solitaire) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
@@ -83,8 +81,6 @@ func (s *Solitaire) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		case "q", "ctrl+c", "esc":
 			return s, tea.Quit
 		}
-	case tea.WindowSizeMsg:
-		s.windowHeight = msg.Height
 	case tea.MouseMsg:
 		switch msg.Type {
 		case tea.MouseLeft:
@@ -93,12 +89,7 @@ func (s *Solitaire) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			}
 		case tea.MouseRelease:
 			if s.mouse.Type == tea.MouseLeft && msg.X == s.mouse.X && msg.Y == s.mouse.Y {
-				height := lipgloss.Height(s.View())
-				if height > s.maxHeight {
-					s.maxHeight = height
-				}
-				y := msg.Y - (s.windowHeight - s.maxHeight)
-				s.click(msg.X, y)
+				s.click(msg.X, msg.Y)
 			}
 			s.mouse = msg
 		}
