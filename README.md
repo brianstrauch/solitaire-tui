@@ -2,7 +2,10 @@
 
 Klondike solitaire for the terminal
 
-<img alt="screenshot" src="https://user-images.githubusercontent.com/7474900/210304154-30302ca1-6f6e-4493-946e-1962466c34fa.png" width="50%" />
+<p align="middle">
+  <img width="49%" alt="screenshot" src="https://user-images.githubusercontent.com/7474900/215708800-9d5f2ff6-96f0-4b0e-815d-6a79fa3f0502.png" style="display: inline">
+  <img width="49%" alt="screenshot" src="https://user-images.githubusercontent.com/7474900/215708795-3c0a8d32-f943-4f49-8a4d-0516eea51a4f.png" style="display: inline">
+</p>
 
 🧋 Made with [bubbletea](https://github.com/charmbracelet/bubbletea).
 
