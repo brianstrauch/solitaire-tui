@@ -11,10 +11,8 @@ Klondike solitaire for the terminal
 
 ## Installation
 
-Clone the repository, then run
-
 ```bash
-go install solitaire-tui
+go install github.com/brianstrauch/solitaire-tui@latest
 ```
 
 ## Troubleshooting
