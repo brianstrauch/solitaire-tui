@@ -1,7 +1,5 @@
 # Solitaire TUI
 
-Klondike solitaire for the terminal
-
 <p align="middle">
   <img width="49%" alt="screenshot" src="https://user-images.githubusercontent.com/7474900/215708800-9d5f2ff6-96f0-4b0e-815d-6a79fa3f0502.png" style="display: inline">
   <img width="49%" alt="screenshot" src="https://user-images.githubusercontent.com/7474900/215708795-3c0a8d32-f943-4f49-8a4d-0516eea51a4f.png" style="display: inline">
