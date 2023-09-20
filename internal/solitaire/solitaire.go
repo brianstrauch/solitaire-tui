@@ -1,6 +1,10 @@
 package solitaire
 
 import (
+	"fmt"
+	"os"
+	"strings"
+
 	"github.com/brianstrauch/solitaire-tui/pkg"
 
 	tea "github.com/charmbracelet/bubbletea"
@@ -8,6 +12,8 @@ import (
 )
 
 type deckType int
+
+var kings map[string]bool = make(map[string]bool)
 
 const (
 	stock      deckType = 0
@@ -179,6 +185,15 @@ func (s *Solitaire) move(to *index) bool {
 		if s.selected.card == fromDeck.Size()-1 && toDeck.Size() == 0 && fromDeck.Top().Value == 0 || toDeck.Size() > 0 && fromDeck.Top().Value == toDeck.Top().Value+1 && fromDeck.Top().Suit == toDeck.Top().Suit {
 			s.toggleSelect(s.selected)
 			toDeck.Add(fromDeck.Pop())
+      card := toDeck.Top().String()
+      cardArr := strings.Split(card, "")
+      if cardArr[0] == "K" {
+        kings[card] = true
+      }
+      if len(kings) == 4 {
+        fmt.Println("You Won!")
+        os.Exit(0)
+      }
 			s.selected = nil
 			return true
 		}
