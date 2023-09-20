@@ -9,6 +9,7 @@ require (
 )
 
 require (
+	github.com/abdfnx/gosh v0.4.0 // indirect
 	github.com/aymanbagabas/go-osc52 v1.0.3 // indirect
 	github.com/containerd/console v1.0.3 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
